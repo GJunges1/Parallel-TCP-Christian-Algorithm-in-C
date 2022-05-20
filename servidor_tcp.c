@@ -82,7 +82,12 @@ int main(void){
 		resposta[tamanho] = '\0';
 		printf("O cliente falou: %s \n", resposta);
 
+	/*******MINHA IMPLEMENTAÇÃO ***************************/
+		//Objetivo: Ler a data/hora do sistema e enviar para o cliente
+
+		// verificando se o cliente pediu a hora
 		if(!strcmp(resposta,"servidor, qual a hora atual?")){
+			// criando descritor de arquivo e lendo data do sistema
 			FILE *fd = popen("date", "re");
 
 			if(fd == NULL) {
@@ -90,25 +95,25 @@ int main(void){
 				return -1;
 			}
 
-			// Read process output
+			// Lendo saída do comando
 			fgets(resposta, MAX_MSG, fd);
 
-			// Close file desc.
+			// Fechando desc. arquivo
 			if(pclose(fd)<0){
 				fprintf(stderr, "Could not close the pipe.\n");
 				return -1;
 			}
 		}
-		else{
-			sprintf(resposta,"erro: não entendi seu pedido");
-		}
+		else sprintf(resposta,"erro: não entendi seu pedido");
 
-		// Enviando resposta para o cliente
+		// Enviando data/hora para o cliente como string
 		write(conexao , resposta , strlen(resposta));
 
 
 		//Passo 4: Encerrar conexão
 		close(conexao);
+	/*******FIM DA MINHA IMPLEMENTAÇÃO ***********************/
+
 	}//fim do while
 
 	/*********************************************************/
