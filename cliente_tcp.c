@@ -17,9 +17,18 @@ int main(int argc , char *argv[]){
 	char *mensagem;
 	char resposta_servidor[MAX_MSG];
 	int tamanho;
+	
+	/*****INÍCIO VARIÁVEIS CRIADAS ****/
+	
 	char *prefixo = "sudo date -s \"";
 	char *sufixo = "\" >/dev/null";
 	char *ipservidor = "127.0.0.1";
+	char cmd[	strlen(prefixo)\
+				+strlen(sufixo)\
+				+strlen(resposta_servidor)\
+				+1];
+
+	/*****FIM DAS VARIÁVEIS CRIADAS ***/
 
 
         //Passo 1: Criar o socket 
@@ -69,24 +78,31 @@ int main(int argc , char *argv[]){
 		return -1;
 	}
 
+	/*******MINHA IMPLEMENTAÇÃO - ATUALIZAÇÂO DA DATA/HORA**/
+	
+	//inserindo caractere de EOF e exibindo resposta
 	resposta_servidor[tamanho-1] = '\0';
 	printf("Resposta: \"%s\"\n",resposta_servidor);
-	//se tudo ocorreu bem...
+
+	//se o servidor retornou a hora:
 	if (strncmp(resposta_servidor,"erro",(size_t)4)){
-		//mudando o horário do cliente
-		char cmd[	strlen(prefixo)\
-					+strlen(sufixo)\
-					+strlen(resposta_servidor)\
-					+1];
+		//"resetando" vetor para receber comando
 		cmd[0]=0;
+		//adicionando prefixo e sufixo à resposta
 		strcat(strcat(strcat(cmd,prefixo),resposta_servidor),sufixo);
-		puts("Atualizando data/hora...");
-		puts(cmd);
+		puts("******************************");
+		puts("Sincronizando data/hora...");
+		//executando o comando
 		system(cmd);
+		puts("******************************");
 	}
+
+	//se o servidor não entendeu a mensagem:
 	else{
 		puts("Erro, o servidor não entendeu o pedido!");
 	}
+
+	/*******FIM DA MINHA IMPLEMENTAÇÃO *********************/
 
 	/*****************************************/
         //Passo 4: Encerrar conexão
