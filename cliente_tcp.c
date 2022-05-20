@@ -18,7 +18,7 @@ int main(int argc , char *argv[]){
 	char resposta_servidor[MAX_MSG];
 	int tamanho;
 	char *prefixo = "sudo date -s \"";
-	char *sufixo = "\"";
+	char *sufixo = "\" >/dev/null";
 	char *ipservidor = "127.0.0.1";
 
 
